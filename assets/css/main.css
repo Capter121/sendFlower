@@ -4,39 +4,83 @@
 
 @layer base {
   body {
-    @apply bg-abyss-950 text-neutral-100 antialiased overflow-x-hidden selection:bg-rose-500/30 selection:text-rose-200;
+    @apply text-neutral-100 antialiased overflow-x-hidden selection:bg-gufeng-cinnabar/30 selection:text-amber-200;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-    background-color: #050508;
+    background-color: #0b0c10;
+    background-image: url('/bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
 }
 
-/* Custom subtle scrollbar */
+/* Antique Ink Wash Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.2);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(226, 156, 54, 0.25);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(226, 156, 54, 0.5);
 }
 
-/* Glassmorphism utilities */
-.glass-panel {
-  background: rgba(13, 14, 20, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+/* Gu Feng Classical Frosted Glass Panel */
+.gufeng-panel {
+  background: rgba(14, 16, 22, 0.72);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 156, 54, 0.22);
+  box-shadow: 
+    0 24px 60px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 20px rgba(226, 156, 54, 0.05);
 }
 
-.glass-pill {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* Gu Feng Classical Pill Badge */
+.gufeng-pill {
+  background: rgba(20, 22, 30, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 156, 54, 0.2);
+}
+
+/* Chinese Seal Stamp (朱砂印章效果) */
+.gufeng-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #c83c3c;
+  color: #fca5a5;
+  background: rgba(200, 60, 60, 0.12);
+  border-radius: 4px;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 600;
+  box-shadow: inset 0 0 6px rgba(200, 60, 60, 0.3);
+}
+
+/* Classical Gold Accent Button */
+.gufeng-btn-gold {
+  background: linear-gradient(135deg, #e29c36 0%, #b87720 100%);
+  color: #1a0f02;
+  font-weight: 600;
+  border: 1px solid rgba(255, 235, 180, 0.4);
+  box-shadow: 0 8px 24px rgba(226, 156, 54, 0.25);
+}
+.gufeng-btn-gold:hover {
+  background: linear-gradient(135deg, #f0b04a 0%, #c88426 100%);
+}
+
+/* Classical Cinnabar Button */
+.gufeng-btn-cinnabar {
+  background: linear-gradient(135deg, #c83c3c 0%, #992222 100%);
+  color: #fff1f1;
+  font-weight: 600;
+  border: 1px solid rgba(255, 180, 180, 0.3);
+  box-shadow: 0 8px 24px rgba(200, 60, 60, 0.3);
 }

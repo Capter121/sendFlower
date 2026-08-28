@@ -9,14 +9,14 @@
   >
     <div
       v-if="isOpen"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
       @click.self="emit('close')"
     >
-      <div class="relative w-full max-w-lg p-6 sm:p-8 rounded-3xl glass-panel text-neutral-200 shadow-2xl border border-white/10 space-y-6 max-h-[90vh] overflow-y-auto">
+      <div class="relative w-full max-w-lg p-6 sm:p-8 rounded-3xl gufeng-panel text-neutral-200 shadow-2xl border border-amber-500/30 space-y-5 max-h-[90vh] overflow-y-auto">
         <!-- Close Button -->
         <button
           @click="emit('close')"
-          class="absolute top-5 right-5 p-2 text-neutral-400 hover:text-white rounded-full hover:bg-white/10 transition-colors"
+          class="absolute top-5 right-5 p-2 text-neutral-400 hover:text-amber-200 rounded-full hover:bg-white/10 transition-colors"
         >
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
@@ -25,37 +25,38 @@
 
         <!-- Title -->
         <div class="space-y-1">
-          <div class="text-xs uppercase tracking-widest text-neutral-400 font-mono">ABOUT PROJECT</div>
-          <h3 class="text-2xl font-serif font-light text-white tracking-wide">关于数字花束 · Digital Bloom</h3>
+          <div class="text-[10px] uppercase tracking-widest text-amber-300 font-serif">✦ 题跋 · 芳华记 ✦</div>
+          <h3 class="text-xl font-serif font-bold text-amber-100 tracking-wide">关于花笺记 · 3D 东方数字花笺</h3>
         </div>
 
         <!-- Content -->
-        <div class="space-y-4 text-sm font-light text-neutral-300 leading-relaxed">
+        <div class="space-y-4 text-xs sm:text-sm font-serif text-neutral-300 leading-relaxed">
           <p>
-            这是一个**纯前端运行、零数据上云**的 3D 粒子数字贺卡。每一朵花均通过纯数学方程在浏览器端实时计算生成。
+            云中谁寄锦书来，雁字回时，月满西楼。
+            《花笺记》是一个**纯前端运行、零数据库上云**的东方美学 3D 虚拟花束与数字花笺。
           </p>
 
-          <div class="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-2">
-            <h4 class="text-xs font-mono text-neutral-400 tracking-wider">🔬 核心技术与工作原理</h4>
+          <div class="p-4 rounded-2xl bg-black/50 border border-amber-500/20 space-y-2">
+            <h4 class="text-xs font-serif text-amber-300 font-semibold tracking-wider">🏮 东方意境与核心技术</h4>
             <ul class="list-disc list-inside space-y-1.5 text-xs text-neutral-300">
-              <li><strong class="text-neutral-100">极坐标叶序学 (Phyllotaxis)：</strong> 依据黄金角 \(\pi(3 - \sqrt{5})\) 生成花蕊点阵。</li>
-              <li><strong class="text-neutral-100">三维贝塞尔包络与双曲凹陷：</strong> 计算花瓣点云曲面与杯状曲度。</li>
-              <li><strong class="text-neutral-100">UnrealBloomPass 霓虹辉光：</strong> WebGL 实时后处理渲染自发光粒子。</li>
-              <li><strong class="text-neutral-100">LZ-String URL 状态压缩：</strong> 你的留言与配置全部压缩在 URL 字符串中，无需数据库存储，保护隐私。</li>
+              <li><strong class="text-amber-200">93 款真实 3D 花卉画阁：</strong> 涵盖手捧锦束、绛雪月季、素瓷幽香、碧水青荷、桃溪落樱、国色牡丹等七大古风品类。</li>
+              <li><strong class="text-amber-200">纯原生 Web Audio 空间声学：</strong> 零外部音频文件依赖，算法实时合成水晶风铃与盛开共鸣。</li>
+              <li><strong class="text-amber-200">手机陀螺仪重力视差：</strong> 倾斜设备感受真切的 3D 重力流转与浮游光斑。</li>
+              <li><strong class="text-amber-200">LZ-String 尺素封缄：</strong> 寄语与花品高密度压缩进 URL 密符中，不存云端，纯享私密。</li>
             </ul>
           </div>
 
-          <p class="text-xs text-neutral-400">
-            生成链接后，将 URL 发送给对方，对方打开即可获得专属于他们的全屏 3D 粒子花朵绽放仪式。
+          <p class="text-xs text-amber-200/70 font-serif italic">
+            生成链接后，将花笺链接发送给远方知己，对方轻触朱砂印章，即可开启属于他们的繁花盛典。
           </p>
         </div>
 
         <div class="pt-2 flex justify-end">
           <button
             @click="emit('close')"
-            class="px-5 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs tracking-wider transition-all"
+            class="px-5 py-2 rounded-xl gufeng-btn-gold text-xs font-serif tracking-wider transition-all"
           >
-            我知道了
+            知晓并返回
           </button>
         </div>
       </div>

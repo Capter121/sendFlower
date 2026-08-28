@@ -1,13 +1,13 @@
 <template>
-  <div class="relative w-full h-[100dvh] overflow-hidden flex flex-col justify-between bg-abyss-950 font-sans select-none">
-    <!-- 1. Unwrapping Gift Seal Ritual Overlay -->
+  <div class="relative w-full h-[100dvh] overflow-hidden flex flex-col justify-between font-sans select-none">
+    <!-- 1. Classical Ancient Envelope Opening Ceremony (Unwrap Ritual) -->
     <UnwrapRitual
       :recipient="cardPayload.r"
       :sender="cardPayload.s"
       @unwrapped="onUnwrapComplete"
     />
 
-    <!-- 2. 3D Realistic Flower Model Fullscreen Canvas -->
+    <!-- 2. 3D Realistic Flower Model Fullscreen Canvas (Transparent over bg.jpg) -->
     <div class="absolute inset-0 z-0">
       <FlowerModel3D
         ref="flowerModelRef"
@@ -20,9 +20,9 @@
 
     <!-- 3. Header Overlay -->
     <header class="w-full flex items-center justify-between px-4 sm:px-6 py-4 z-20 flex-shrink-0">
-      <NuxtLink to="/" class="flex items-center gap-2 text-xs font-mono tracking-widest text-neutral-400 hover:text-white transition-colors group">
-        <span class="text-xs group-hover:rotate-45 transition-transform">✦</span>
-        <span>DIGITAL BLOOM · 3D</span>
+      <NuxtLink to="/" class="flex items-center gap-2 text-xs font-serif tracking-widest text-amber-200/80 hover:text-amber-100 transition-colors group">
+        <span class="text-xs group-hover:rotate-45 transition-transform text-amber-300">✦</span>
+        <span>花笺记 · 3D 东方繁花</span>
       </NuxtLink>
 
       <div class="flex items-center gap-2">
@@ -30,17 +30,17 @@
         <button
           type="button"
           @click="toggleSound"
-          title="音效开关"
-          class="w-8 h-8 rounded-full text-xs text-neutral-300 glass-pill hover:bg-white/15 transition-all flex items-center justify-center"
+          :title="isMuted ? '开启空灵风铃音效' : '静音'"
+          class="w-8 h-8 rounded-xl text-xs text-amber-200 gufeng-pill hover:bg-white/10 transition-all flex items-center justify-center border border-amber-500/30"
         >
-          <span>{{ isMuted ? '🔇' : '🔔' }}</span>
+          <span>{{ isMuted ? '🔕' : '🎐' }}</span>
         </button>
 
         <NuxtLink
           to="/"
-          class="px-3.5 py-1.5 rounded-full text-xs font-medium text-neutral-200 glass-pill hover:bg-white/15 transition-all flex items-center gap-1.5"
+          class="px-3.5 py-1.5 rounded-xl text-xs font-serif font-medium text-amber-100 gufeng-pill hover:bg-amber-500/20 transition-all flex items-center gap-1.5 border border-amber-500/30 shadow-sm"
         >
-          <span>🌸 我也要送花</span>
+          <span>🌸 我亦要赠花</span>
         </NuxtLink>
       </div>
     </header>
@@ -54,18 +54,18 @@
       >
         <div
           v-if="isCardVisible"
-          class="glass-panel p-5 sm:p-7 rounded-3xl space-y-4 pointer-events-auto text-neutral-100 shadow-2xl border border-white/10 max-h-[calc(100dvh-5.5rem)] flex flex-col"
+          class="gufeng-panel p-5 sm:p-7 rounded-3xl space-y-4 pointer-events-auto text-neutral-100 shadow-2xl border border-amber-500/30 max-h-[calc(100dvh-5.5rem)] flex flex-col"
         >
           <!-- Card Header / Flower Badge & Recipient -->
           <div class="space-y-1 flex-shrink-0">
             <div class="flex items-center justify-between text-xs">
-              <span class="font-mono uppercase tracking-widest text-neutral-400">GREETING CARD</span>
+              <span class="font-serif tracking-widest text-amber-400/80">✦ 东方花笺 · 亲启 ✦</span>
               <span
-                class="px-2.5 py-0.5 rounded-full text-[10px] font-mono border"
+                class="px-2.5 py-0.5 rounded-md text-[10px] font-serif border"
                 :style="{
-                  borderColor: modelInfo.accentColor + '50',
+                  borderColor: modelInfo.accentColor + '60',
                   color: modelInfo.accentColor,
-                  backgroundColor: modelInfo.accentColor + '15'
+                  backgroundColor: modelInfo.accentColor + '18'
                 }"
               >
                 {{ modelInfo.name }} · {{ modelInfo.categoryLabel }}
@@ -73,25 +73,25 @@
             </div>
 
             <!-- Recipient name if present -->
-            <h2 v-if="cardPayload.r" class="text-lg font-serif font-light text-white pt-1">
-              致 {{ cardPayload.r }}：
+            <h2 v-if="cardPayload.r" class="text-xl font-serif font-bold text-amber-100 pt-1">
+              致 · {{ cardPayload.r }} 雅鉴：
             </h2>
           </div>
 
           <!-- Main Message (Scrollable if long) -->
           <div class="flex-1 overflow-y-auto min-h-0 py-1 pr-1 custom-scroll">
-            <p class="font-serif text-sm sm:text-base text-neutral-200 leading-relaxed tracking-wide font-light">
+            <p class="font-serif text-sm sm:text-base text-amber-100/90 leading-relaxed tracking-wide font-normal">
               {{ displayMessage }}
             </p>
           </div>
 
           <!-- Card Footer & Sender -->
-          <div class="flex items-center justify-between pt-2 border-t border-white/5 text-xs text-neutral-400 flex-shrink-0">
-            <span class="font-serif italic text-neutral-500 text-[11px] truncate max-w-[50%]">
+          <div class="flex items-center justify-between pt-2 border-t border-amber-500/15 text-xs text-neutral-400 flex-shrink-0">
+            <span class="font-serif italic text-amber-200/60 text-[11px] truncate max-w-[50%]">
               “{{ modelInfo.tagline }}”
             </span>
-            <span v-if="cardPayload.s" class="font-serif text-neutral-300">
-              —— {{ cardPayload.s }}
+            <span v-if="cardPayload.s" class="font-serif text-amber-200 font-medium">
+              落款 · {{ cardPayload.s }}
             </span>
           </div>
 
@@ -102,22 +102,20 @@
               type="button"
               @click="onOpenCardPoster"
               :disabled="isGeneratingPoster"
-              class="w-full py-3 px-5 rounded-2xl bg-gradient-to-r from-amber-500/20 to-rose-500/20 hover:from-amber-500/30 hover:to-rose-500/30 text-amber-200 font-medium text-xs tracking-wider transition-all flex items-center justify-center gap-2 border border-amber-500/30 active:scale-[0.99]"
+              class="w-full py-3 px-5 rounded-2xl bg-gradient-to-r from-red-600/30 via-amber-600/30 to-red-600/30 hover:from-red-600/40 hover:to-amber-600/40 text-amber-200 font-serif font-semibold text-xs tracking-wider transition-all flex items-center justify-center gap-2 border border-red-500/40 active:scale-[0.99]"
             >
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              <span>{{ isGeneratingPoster ? '正在合成高清贺卡...' : '保存 / 下载 3D 贺卡图片 (含二维码)' }}</span>
+              <span>🖼️</span>
+              <span>{{ isGeneratingPoster ? '正在研墨绘制花笺...' : '保存 / 下载 3D 古风花笺画轴 (含扫码印信)' }}</span>
             </button>
 
             <!-- Send Your Own -->
             <NuxtLink
               to="/"
-              class="w-full py-2.5 px-5 rounded-2xl bg-white text-black font-semibold text-xs tracking-widest uppercase hover:bg-neutral-200 transition-all flex items-center justify-center gap-2 shadow-xl shadow-white/10 active:scale-[0.99] group"
+              class="w-full py-2.5 px-5 rounded-2xl gufeng-btn-gold text-xs font-serif font-bold tracking-widest uppercase transition-all flex items-center justify-center gap-2 shadow-xl active:scale-[0.99] group"
             >
-              <span class="text-sm">🌸</span>
-              <span>我也要发送一束花</span>
-              <span class="font-mono opacity-60">→</span>
+              <span>🌸</span>
+              <span>我亦要寄一束东方繁花</span>
+              <span class="opacity-70">→</span>
             </NuxtLink>
           </div>
         </div>
@@ -221,10 +219,10 @@ onMounted(() => {
   background: transparent;
 }
 .custom-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(226, 156, 54, 0.3);
   border-radius: 9999px;
 }
 .custom-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(226, 156, 54, 0.6);
 }
 </style>

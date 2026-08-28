@@ -48,7 +48,27 @@ function drawRoundedRect(
 }
 
 /**
- * 辅助函数：自动换行绘制文本
+ * 辅助函数：绘制朱砂印章
+ */
+function drawSeal(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, size = 32) {
+  ctx.save();
+  ctx.fillStyle = 'rgba(200, 60, 60, 0.9)';
+  ctx.strokeStyle = '#fca5a5';
+  ctx.lineWidth = 1.5;
+  drawRoundedRect(ctx, x, y, size, size, 5);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = `bold ${Math.round(size * 0.48)}px "Noto Serif SC", serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, x + size / 2, y + size / 2);
+  ctx.restore();
+}
+
+/**
+ * 辅助函数：自动换行绘制古风文本
  */
 function wrapText(
   ctx: CanvasRenderingContext2D,
@@ -80,7 +100,7 @@ function wrapText(
 }
 
 /**
- * 生成高分辨率贺卡海报 (1080 x 1560)
+ * 生成东方古风高清花笺画轴 (1080 x 1560)
  */
 export async function generateCardPoster(options: CardPosterOptions): Promise<string> {
   const width = 1080;
@@ -91,80 +111,88 @@ export async function generateCardPoster(options: CardPosterOptions): Promise<st
   canvas.height = height;
   const ctx = canvas.getContext('2d')!;
 
-  // 1. 深度暗夜背景与氛围微光
-  const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
-  bgGrad.addColorStop(0, '#06070b');
-  bgGrad.addColorStop(0.5, '#0a0c13');
-  bgGrad.addColorStop(1, '#050508');
-  ctx.fillStyle = bgGrad;
-  ctx.fillRect(0, 0, width, height);
+  // 1. 尝试绘制背景 bg.jpg，若无则使用玄黑墨韵渐变
+  try {
+    const bgImg = await loadImage('/bg.jpg');
+    ctx.drawImage(bgImg, 0, 0, width, height);
+    // 覆盖一层轻柔墨韵微光
+    ctx.fillStyle = 'rgba(11, 12, 16, 0.65)';
+    ctx.fillRect(0, 0, width, height);
+  } catch (e) {
+    const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
+    bgGrad.addColorStop(0, '#0b0c10');
+    bgGrad.addColorStop(0.5, '#161822');
+    bgGrad.addColorStop(1, '#08090d');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, width, height);
+  }
 
-  // 主题中心辐射光晕
-  const glowGrad = ctx.createRadialGradient(width / 2, 480, 20, width / 2, 480, 420);
-  glowGrad.addColorStop(0, `${options.modelInfo.accentColor}35`);
-  glowGrad.addColorStop(0.5, `${options.modelInfo.glowColor || options.modelInfo.accentColor}15`);
+  // 2. 主题中心古典鎏金/琉璃光晕
+  const glowGrad = ctx.createRadialGradient(width / 2, 480, 20, width / 2, 480, 440);
+  glowGrad.addColorStop(0, `${options.modelInfo.accentColor}40`);
+  glowGrad.addColorStop(0.6, `${options.modelInfo.glowColor || options.modelInfo.accentColor}18`);
   glowGrad.addColorStop(1, 'transparent');
   ctx.fillStyle = glowGrad;
   ctx.fillRect(0, 0, width, 1000);
 
-  // 浮游微光星斑
-  ctx.fillStyle = '#ffffff';
-  for (let i = 0; i < 60; i++) {
-    const sx = Math.sin(i * 99) * 0.5 + 0.5;
-    const sy = Math.cos(i * 33) * 0.5 + 0.5;
-    const sa = (Math.sin(i * 12) * 0.5 + 0.5) * 0.4;
+  // 浮游金屑微粒
+  ctx.fillStyle = '#fde68a';
+  for (let i = 0; i < 65; i++) {
+    const sx = Math.sin(i * 77) * 0.5 + 0.5;
+    const sy = Math.cos(i * 44) * 0.5 + 0.5;
+    const sa = (Math.sin(i * 15) * 0.5 + 0.5) * 0.45;
     ctx.globalAlpha = sa;
     ctx.beginPath();
-    ctx.arc(sx * width, sy * height, (i % 3) + 1, 0, Math.PI * 2);
+    ctx.arc(sx * width, sy * height, (i % 3) + 1.2, 0, Math.PI * 2);
     ctx.fill();
   }
   ctx.globalAlpha = 1.0;
 
-  // 2. 双层奢华边框
+  // 3. 古典回纹与双层金丝画框
   ctx.save();
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
-  ctx.lineWidth = 2;
-  drawRoundedRect(ctx, 40, 40, width - 80, height - 80, 36);
+  ctx.strokeStyle = 'rgba(226, 156, 54, 0.4)';
+  ctx.lineWidth = 2.5;
+  drawRoundedRect(ctx, 40, 40, width - 80, height - 80, 32);
   ctx.stroke();
 
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+  ctx.strokeStyle = 'rgba(226, 156, 54, 0.15)';
   ctx.lineWidth = 1;
-  drawRoundedRect(ctx, 48, 48, width - 96, height - 96, 30);
+  drawRoundedRect(ctx, 48, 48, width - 96, height - 96, 26);
   ctx.stroke();
 
-  // 四角装饰 ✦
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-  ctx.font = '16px serif';
+  // 四角回纹祥云 ✦
+  ctx.fillStyle = '#f59e0b';
+  ctx.font = '18px "Noto Serif SC", serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('✦', 65, 65);
-  ctx.fillText('✦', width - 65, 65);
-  ctx.fillText('✦', 65, height - 65);
-  ctx.fillText('✦', width - 65, height - 65);
+  ctx.fillText('❖', 65, 65);
+  ctx.fillText('❖', width - 65, 65);
+  ctx.fillText('❖', 65, height - 65);
+  ctx.fillText('❖', width - 65, height - 65);
   ctx.restore();
 
-  // 3. 顶部品牌与标语
+  // 4. 顶部古典题名
   ctx.save();
   ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-  ctx.font = '500 18px Cinzel, "Noto Serif SC", serif';
-  ctx.letterSpacing = '6px';
-  ctx.fillText('✦  D I G I T A L   B L O O M  ✦', width / 2, 105);
+  ctx.fillStyle = '#fef3c7';
+  ctx.font = '600 22px "Noto Serif SC", serif';
+  ctx.letterSpacing = '8px';
+  ctx.fillText('✦  花 笺 记 · 芳 华 锦 书  ✦', width / 2, 105);
 
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-  ctx.font = '300 12px monospace';
-  ctx.letterSpacing = '3px';
-  ctx.fillText('3D IMMERSIVE DIGITAL GREETING CARD', width / 2, 132);
+  ctx.fillStyle = 'rgba(253, 230, 138, 0.6)';
+  ctx.font = '300 12px "Noto Serif SC", monospace';
+  ctx.letterSpacing = '4px';
+  ctx.fillText('3D IMMERSIVE FLORAL LETTER · 东方古韵', width / 2, 134);
 
-  // 细分隔线
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+  // 细金分隔线
+  ctx.strokeStyle = 'rgba(226, 156, 54, 0.3)';
   ctx.beginPath();
-  ctx.moveTo(width / 2 - 140, 152);
-  ctx.lineTo(width / 2 + 140, 152);
+  ctx.moveTo(width / 2 - 160, 152);
+  ctx.lineTo(width / 2 + 160, 152);
   ctx.stroke();
   ctx.restore();
 
-  // 4. 3D 花卉主视觉 (Snapshot)
+  // 5. 3D 花卉画中仙境 (Snapshot)
   if (options.snapshotDataUrl) {
     try {
       const flowerImg = await loadImage(options.snapshotDataUrl);
@@ -173,9 +201,9 @@ export async function generateCardPoster(options: CardPosterOptions): Promise<st
       const imgY = 170;
 
       ctx.save();
-      // 底部花托微阴影
-      const shadowGrad = ctx.createRadialGradient(width / 2, imgY + imgSize - 60, 10, width / 2, imgY + imgSize - 60, 220);
-      shadowGrad.addColorStop(0, 'rgba(0, 0, 0, 0.6)');
+      // 月洞门底托微光
+      const shadowGrad = ctx.createRadialGradient(width / 2, imgY + imgSize - 50, 10, width / 2, imgY + imgSize - 50, 240);
+      shadowGrad.addColorStop(0, 'rgba(0, 0, 0, 0.7)');
       shadowGrad.addColorStop(1, 'transparent');
       ctx.fillStyle = shadowGrad;
       ctx.fillRect(imgX - 40, imgY + imgSize - 120, imgSize + 80, 120);
@@ -188,36 +216,36 @@ export async function generateCardPoster(options: CardPosterOptions): Promise<st
     }
   }
 
-  // 5. 花卉名称与花语 Banner
+  // 6. 花卉名称与花语 Banner
   ctx.save();
   ctx.textAlign = 'center';
 
-  // 类别微胶囊
-  ctx.fillStyle = `${options.modelInfo.accentColor}20`;
-  ctx.strokeStyle = `${options.modelInfo.accentColor}60`;
+  // 类别印记微胶囊
+  ctx.fillStyle = 'rgba(226, 156, 54, 0.15)';
+  ctx.strokeStyle = 'rgba(226, 156, 54, 0.5)';
   ctx.lineWidth = 1;
-  const tagWidth = 140;
-  const tagHeight = 30;
-  drawRoundedRect(ctx, (width - tagWidth) / 2, 750, tagWidth, tagHeight, 15);
+  const tagWidth = 150;
+  const tagHeight = 32;
+  drawRoundedRect(ctx, (width - tagWidth) / 2, 750, tagWidth, tagHeight, 16);
   ctx.fill();
   ctx.stroke();
 
-  ctx.fillStyle = options.modelInfo.accentColor;
-  ctx.font = '500 13px "Noto Serif SC", sans-serif';
-  ctx.fillText(options.modelInfo.categoryLabel, width / 2, 770);
+  ctx.fillStyle = '#fde68a';
+  ctx.font = '500 14px "Noto Serif SC", serif';
+  ctx.fillText(`品类 · ${options.modelInfo.categoryLabel}`, width / 2, 772);
 
   // 花名
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '600 38px "Noto Serif SC", Cinzel, serif';
+  ctx.fillStyle = '#fffbeb';
+  ctx.font = '700 40px "Noto Serif SC", serif';
   ctx.fillText(options.modelInfo.name, width / 2, 825);
 
-  // 花语 Tagline
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
-  ctx.font = 'italic 300 18px "Noto Serif SC", serif';
+  // 诗意题跋
+  ctx.fillStyle = '#fcd34d';
+  ctx.font = 'italic 400 18px "Noto Serif SC", serif';
   ctx.fillText(`“ ${options.modelInfo.tagline} ”`, width / 2, 865);
   ctx.restore();
 
-  // 6. 寄语卡片区域 (Frosted Glass Box)
+  // 7. 尺素寄语卡片区域 (宣纸绢帛暗纹框)
   const cardX = 90;
   const cardY = 910;
   const cardW = width - 180;
@@ -225,46 +253,48 @@ export async function generateCardPoster(options: CardPosterOptions): Promise<st
 
   ctx.save();
   // 卡片背景与边框
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.035)';
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+  ctx.fillStyle = 'rgba(15, 17, 24, 0.75)';
+  ctx.strokeStyle = 'rgba(226, 156, 54, 0.35)';
   ctx.lineWidth = 1.5;
   drawRoundedRect(ctx, cardX, cardY, cardW, cardH, 24);
   ctx.fill();
   ctx.stroke();
 
   // 称呼 (Recipient)
-  let textStartY = cardY + 50;
+  let textStartY = cardY + 52;
   if (options.recipient) {
     ctx.textAlign = 'left';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-    ctx.font = '600 20px "Noto Serif SC", serif';
-    ctx.fillText(`致 ${options.recipient}：`, cardX + 36, textStartY);
-    textStartY += 42;
+    ctx.fillStyle = '#fef3c7';
+    ctx.font = '600 21px "Noto Serif SC", serif';
+    ctx.fillText(`致 · ${options.recipient} 雅鉴：`, cardX + 36, textStartY);
+    textStartY += 44;
   }
 
   // 正文内容 (Message)
   ctx.textAlign = 'left';
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+  ctx.fillStyle = '#fde68a';
   ctx.font = '300 19px "Noto Serif SC", serif';
   const displayMsg = options.message || options.modelInfo.defaultMessage;
-  const nextY = wrapText(ctx, displayMsg, cardX + 36, textStartY, cardW - 72, 34);
+  const nextY = wrapText(ctx, displayMsg, cardX + 36, textStartY, cardW - 72, 36);
 
-  // 署名 (Sender)
+  // 署名与朱砂印章 (Sender)
   if (options.sender) {
     ctx.textAlign = 'right';
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-    ctx.font = 'italic 400 18px "Noto Serif SC", serif';
-    ctx.fillText(`—— ${options.sender}`, cardX + cardW - 36, Math.max(nextY + 25, cardY + 230));
+    ctx.fillStyle = '#fef3c7';
+    ctx.font = 'italic 500 18px "Noto Serif SC", serif';
+    const sigY = Math.max(nextY + 25, cardY + 235);
+    ctx.fillText(`落款 · ${options.sender}`, cardX + cardW - 68, sigY);
+    drawSeal(ctx, '吉', cardX + cardW - 55, sigY - 20, 26);
   }
 
   // 分隔细线
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+  ctx.strokeStyle = 'rgba(226, 156, 54, 0.15)';
   ctx.beginPath();
-  ctx.moveTo(cardX + 28, cardY + 275);
-  ctx.lineTo(cardX + cardW - 28, cardY + 275);
+  ctx.moveTo(cardX + 28, cardY + 278);
+  ctx.lineTo(cardX + cardW - 28, cardY + 278);
   ctx.stroke();
 
-  // 7. 二维码与互动引导
+  // 8. 扫码印信与二维码
   try {
     const qrDataUrl = await QRCode.toDataURL(options.shareUrl, {
       width: 120,
@@ -275,37 +305,43 @@ export async function generateCardPoster(options: CardPosterOptions): Promise<st
       }
     });
     const qrImg = await loadImage(qrDataUrl);
-    const qrSize = 110;
+    const qrSize = 108;
     const qrX = cardX + 36;
-    const qrY = cardY + 295;
+    const qrY = cardY + 298;
+
+    // 二维码金边框
+    ctx.strokeStyle = 'rgba(226, 156, 54, 0.4)';
+    ctx.lineWidth = 1;
+    drawRoundedRect(ctx, qrX - 4, qrY - 4, qrSize + 8, qrSize + 8, 8);
+    ctx.stroke();
 
     ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
 
     // 二维码右侧文字说明
     ctx.textAlign = 'left';
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '500 15px "Noto Serif SC", sans-serif';
-    ctx.fillText('扫码开启 3D 沉浸式互动花束', qrX + qrSize + 22, qrY + 38);
+    ctx.fillStyle = '#fffbeb';
+    ctx.font = '600 16px "Noto Serif SC", serif';
+    ctx.fillText('扫码抚开朱印 · 直达 3D 沉浸式互动花境', qrX + qrSize + 22, qrY + 38);
 
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.fillStyle = 'rgba(253, 230, 138, 0.7)';
     ctx.font = '300 12px monospace';
-    ctx.fillText('SCAN TO EXPERIENCE 3D BLOOM & WISHES', qrX + qrSize + 22, qrY + 64);
+    ctx.fillText('SCAN QR CODE TO EXPERIENCE 3D BLOOM SCENE', qrX + qrSize + 22, qrY + 64);
 
     const dateStr = new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
-    ctx.fillText(`DIGITAL BLOOM CERTIFICATE · ${dateStr}`, qrX + qrSize + 22, qrY + 88);
+    ctx.fillText(`FLORAL CERTIFICATE · 岁在此时 · ${dateStr}`, qrX + qrSize + 22, qrY + 88);
   } catch (e) {
     console.warn('Failed to generate QR code on poster:', e);
   }
 
   ctx.restore();
 
-  // 8. 底部防伪编码与版权
+  // 9. 底部防伪编码与古卷落款
   ctx.save();
   ctx.textAlign = 'center';
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+  ctx.fillStyle = 'rgba(226, 156, 54, 0.4)';
   ctx.font = '300 11px monospace';
   ctx.letterSpacing = '2px';
-  ctx.fillText(`TOKEN #BLOOM-${Date.now().toString(36).toUpperCase()} · PURE CLIENT ENCRYPTION`, width / 2, height - 60);
+  ctx.fillText(`✦ 花笺密符 #BLOOM-${Date.now().toString(36).toUpperCase()} · 纯前端离线封缄 ✦`, width / 2, height - 60);
   ctx.restore();
 
   return canvas.toDataURL('image/png', 1.0);
@@ -314,7 +350,7 @@ export async function generateCardPoster(options: CardPosterOptions): Promise<st
 /**
  * 浏览器一键触发下载海报
  */
-export function downloadImage(dataUrl: string, filename = 'DigitalBloom_Card.png') {
+export function downloadImage(dataUrl: string, filename = '3D古风花笺.png') {
   const link = document.createElement('a');
   link.download = filename;
   link.href = dataUrl;

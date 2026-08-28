@@ -1,6 +1,6 @@
 <template>
-  <div class="relative w-full h-[100dvh] overflow-hidden flex flex-col justify-between bg-abyss-950 font-sans select-none">
-    <!-- 3D Realistic Flower Model Canvas -->
+  <div class="relative w-full h-[100dvh] overflow-hidden flex flex-col justify-between font-sans select-none">
+    <!-- 3D Realistic Flower Model Canvas with transparent background over bg.jpg -->
     <div class="absolute inset-0 z-0">
       <FlowerModel3D
         ref="flowerModelRef"
@@ -19,21 +19,21 @@
       @open-mood="isMoodOpen = true"
     />
 
-    <!-- Main Content: Floating Frosted Panel with Fixed Action Footer -->
+    <!-- Main Content: Classical Gu Feng Floating Panel with Fixed Action Footer -->
     <main class="relative z-10 w-full max-w-xl mx-auto px-3 sm:px-4 pb-3 sm:pb-5 flex-1 flex flex-col justify-end pointer-events-none min-h-0">
-      <div class="glass-panel p-4 sm:p-5 rounded-3xl pointer-events-auto shadow-2xl transition-all border border-white/10 flex flex-col max-h-[calc(100dvh-5.2rem)]">
+      <div class="gufeng-panel p-4 sm:p-5 rounded-3xl pointer-events-auto shadow-2xl transition-all flex flex-col max-h-[calc(100dvh-5.2rem)]">
         <!-- 1. Flower Info Header (Fixed Top) -->
-        <div class="flex-shrink-0 flex items-center justify-between pb-2 border-b border-white/10">
+        <div class="flex-shrink-0 flex items-center justify-between pb-2 border-b border-amber-500/20">
           <div class="space-y-0.5">
             <div class="flex items-center gap-2">
-              <span class="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-neutral-300 font-mono">
+              <span class="text-[10px] px-2 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-200 font-serif">
                 {{ activeModel.categoryLabel }}
               </span>
-              <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400">3D BLOOM</span>
+              <span class="text-[10px] font-serif tracking-widest text-amber-400/70">✦ 东方雅卉 ✦</span>
             </div>
-            <h2 class="text-lg font-serif text-white flex items-center gap-2 pt-0.5">
+            <h2 class="text-lg font-serif font-bold text-amber-100 flex items-center gap-2 pt-0.5">
               <span>{{ activeModel.name }}</span>
-              <span class="text-xs text-neutral-400 font-light italic truncate max-w-[150px] sm:max-w-[240px]">
+              <span class="text-xs text-amber-200/60 font-serif font-normal italic truncate max-w-[150px] sm:max-w-[240px]">
                 “{{ activeModel.tagline }}”
               </span>
             </h2>
@@ -41,26 +41,26 @@
 
           <!-- Quick Action Buttons in Header -->
           <div class="flex items-center gap-1.5 flex-shrink-0">
-            <!-- Mood Matcher Trigger -->
+            <!-- Mood Matcher Trigger (寄情) -->
             <button
               type="button"
               @click="isMoodOpen = true"
-              title="情绪配花与花签"
-              class="px-2.5 py-1.5 rounded-full text-xs text-purple-200 bg-purple-500/15 hover:bg-purple-500/25 border border-purple-500/30 transition-all flex items-center gap-1 shadow-sm active:scale-95"
+              title="寄情题笺与花签"
+              class="px-2.5 py-1.5 rounded-xl text-xs text-amber-200 bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 transition-all flex items-center gap-1 shadow-sm active:scale-95"
             >
-              <span>🔮</span>
-              <span class="font-sans font-medium text-[11px] hidden sm:inline">情绪配花</span>
+              <span>🏮</span>
+              <span class="font-serif font-medium text-[11px] hidden sm:inline">寄情题笺</span>
             </button>
 
-            <!-- Quick Random Button -->
+            <!-- Quick Random Button (摇签) -->
             <button
               type="button"
               @click="pickRandomFlower"
-              title="随机抽取一束花"
-              class="px-2.5 py-1.5 rounded-full text-xs text-amber-200 bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 transition-all flex items-center gap-1 shadow-sm active:scale-95 group"
+              title="随机采撷一束花"
+              class="px-2.5 py-1.5 rounded-xl text-xs text-amber-100 bg-red-900/30 hover:bg-red-900/50 border border-red-500/30 transition-all flex items-center gap-1 shadow-sm active:scale-95 group"
             >
               <span class="text-sm group-hover:rotate-45 transition-transform">🎲</span>
-              <span class="font-sans font-medium text-[11px]">换一束</span>
+              <span class="font-serif font-medium text-[11px]">摇签换花</span>
             </button>
           </div>
         </div>
@@ -83,15 +83,15 @@
         </div>
 
         <!-- 3. Generate Link Action Button (Fixed Bottom & Always Visible) -->
-        <div class="flex-shrink-0 pt-2.5 border-t border-white/10">
+        <div class="flex-shrink-0 pt-2.5 border-t border-amber-500/20">
           <button
             type="button"
             @click="onGenerateShareUrl"
-            class="w-full py-3 px-5 rounded-2xl bg-white text-black font-semibold text-xs tracking-widest uppercase hover:bg-neutral-200 transition-all flex items-center justify-center gap-2 shadow-xl shadow-white/10 active:scale-[0.99] group"
+            class="w-full py-3 px-5 rounded-2xl gufeng-btn-gold text-xs font-serif font-bold tracking-widest uppercase transition-all flex items-center justify-center gap-2 shadow-xl active:scale-[0.99] group"
           >
-            <span class="w-2 h-2 rounded-full bg-black group-hover:scale-125 transition-transform" />
-            <span>生成专属 3D 花束贺卡链接</span>
-            <span class="font-mono opacity-60">→</span>
+            <span>📜</span>
+            <span>卷轴封缄 · 生成 3D 花笺链接</span>
+            <span class="opacity-70">→</span>
           </button>
         </div>
       </div>
@@ -164,7 +164,7 @@ function onSelectModel(modelId: string) {
 function pickRandomFlower() {
   const randomModel = getRandomFlowerModel(selectedModelId.value);
   selectedModelId.value = randomModel.id;
-  toastMessage.value = `已随机为你挑选「${randomModel.name}」✨`;
+  toastMessage.value = `已随机为你采撷「${randomModel.name}」✨`;
   showToast.value = true;
   setTimeout(() => {
     showToast.value = false;
@@ -177,7 +177,7 @@ function onApplyMoodRecommendation(data: { modelId: string; message: string }) {
   messageEditorRef.value?.setMessage(data.message);
 
   const matchedFlower = getFlowerModelById(data.modelId);
-  toastMessage.value = `已智能选配「${matchedFlower.name}」与专属寄语 🔮`;
+  toastMessage.value = `已智能选配「${matchedFlower.name}」与意境题词 🏮`;
   showToast.value = true;
   setTimeout(() => {
     showToast.value = false;
@@ -233,7 +233,7 @@ async function onOpenSenderCardPoster() {
 }
 
 function onCopySuccess() {
-  toastMessage.value = '专属花束链接已复制到剪贴板 ✨';
+  toastMessage.value = '花笺密符已复制到剪贴板 📜';
   showToast.value = true;
   setTimeout(() => {
     showToast.value = false;
@@ -249,10 +249,10 @@ function onCopySuccess() {
   background: transparent;
 }
 .custom-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(226, 156, 54, 0.3);
   border-radius: 9999px;
 }
 .custom-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(226, 156, 54, 0.6);
 }
 </style>

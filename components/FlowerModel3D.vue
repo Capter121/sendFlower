@@ -339,20 +339,20 @@ onMounted(() => {
 
   // 1. Scene
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x050508);
-  scene.fog = new THREE.FogExp2(0x050508, 0.06);
+  scene.background = null;
 
   // 2. Camera
   camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
   camera.position.set(0, 1.2, 4.5);
 
-  // 3. Renderer
+  // 3. Renderer with transparent background for Gu Feng bg.jpg
   renderer = new THREE.WebGLRenderer({
     antialias: true,
-    alpha: false,
+    alpha: true,
     preserveDrawingBuffer: true,
     powerPreference: 'high-performance'
   });
+  renderer.setClearColor(0x000000, 0);
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;

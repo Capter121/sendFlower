@@ -1,68 +1,77 @@
 <template>
-  <div class="space-y-2.5">
+  <div class="space-y-2">
     <!-- Header with Category Tabs -->
-    <div class="flex items-center justify-between">
-      <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400">
-        挑选花卉 · 7大分类 ({{ FLOWER_MODELS.length }}款)
-      </span>
-      <span class="text-[10px] font-mono text-neutral-500">
-        已选: <span class="text-neutral-300 font-sans">{{ currentModel?.name }}</span>
+    <div class="flex items-center justify-between text-xs">
+      <div class="flex items-center gap-1.5">
+        <span class="text-amber-300 font-serif font-semibold text-xs">芳草集 · 挑选花品</span>
+        <span class="text-[10px] font-serif text-neutral-400">（共 93 款）</span>
+      </div>
+      <span class="text-[10px] font-serif text-amber-200/70">
+        已选：{{ currentModel.name }}
       </span>
     </div>
 
-    <!-- Category Filter Tabs -->
-    <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar text-xs">
+    <!-- Category Filter Tabs (Horizontal Scrollable) -->
+    <div class="flex items-center gap-1.5 overflow-x-auto pb-1 custom-scroll text-xs">
       <button
         v-for="cat in categories"
         :key="cat.id"
         type="button"
         @click="selectedCategory = cat.id"
-        class="px-2.5 py-1 rounded-full text-[11px] whitespace-nowrap transition-all border flex items-center gap-1 flex-shrink-0"
-        :class="[
+        class="px-2.5 py-1 rounded-xl whitespace-nowrap transition-all text-[11px] font-serif flex items-center gap-1 flex-shrink-0"
+        :class="
           selectedCategory === cat.id
-            ? 'bg-white/20 border-white/40 text-white font-medium shadow-sm'
-            : 'bg-white/5 border-white/5 text-neutral-400 hover:text-neutral-200 hover:bg-white/10'
-        ]"
+            ? 'bg-amber-500/25 text-amber-200 border border-amber-500/50 shadow-sm font-semibold'
+            : 'bg-black/40 text-neutral-400 hover:text-amber-100 hover:bg-black/60 border border-white/5'
+        "
       >
-        <span>{{ cat.name }}</span>
-        <span class="text-[9px] opacity-60 font-mono">({{ getCategoryCount(cat.id) }})</span>
+        <span>{{ cat.icon }}</span>
+        <span>{{ cat.label }}</span>
+        <span class="text-[9px] opacity-70 font-mono">({{ getCategoryCount(cat.id) }})</span>
       </button>
     </div>
 
-    <!-- Models Grid Shelf (Compact & Scrollable) -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 max-h-36 sm:max-h-40 overflow-y-auto pr-1">
+    <!-- Flower Model Cards Shelf (Scrollable Grid) -->
+    <div class="grid grid-cols-3 sm:grid-cols-4 gap-1.5 max-h-36 overflow-y-auto pr-1 custom-scroll">
       <button
         v-for="model in filteredModels"
         :key="model.id"
         type="button"
         @click="emit('select', model.id)"
-        class="relative p-2 rounded-xl flex flex-col items-start gap-0.5 transition-all text-xs border text-left group"
-        :class="[
-          modelValue === model.id
-            ? 'bg-white/15 border-white/40 shadow-lg text-white ring-1 ring-white/20'
-            : 'bg-white/5 border-white/5 text-neutral-400 hover:bg-white/10 hover:text-neutral-200'
-        ]"
+        class="relative p-2 rounded-xl text-left transition-all border group flex flex-col justify-between min-h-[58px]"
+        :class="
+          model.id === modelValue
+            ? 'bg-gradient-to-b from-amber-500/25 to-black/60 border-amber-400 shadow-md shadow-amber-900/20'
+            : 'bg-black/40 hover:bg-black/60 border-white/10 hover:border-amber-400/40'
+        "
       >
-        <div class="w-full flex items-center justify-between">
+        <!-- Top Row: Category tag / Selection badge -->
+        <div class="flex items-center justify-between w-full">
           <span
-            class="w-2 h-2 rounded-full transition-transform"
+            class="text-[9px] px-1.5 py-0.2 rounded font-serif"
             :style="{
-              backgroundColor: model.accentColor,
-              boxShadow: modelValue === model.id ? `0 0 8px ${model.accentColor}` : 'none'
+              color: model.accentColor,
+              backgroundColor: model.accentColor + '18',
+              borderColor: model.accentColor + '40',
+              borderWidth: '1px'
             }"
-            :class="modelValue === model.id ? 'scale-125' : 'opacity-60'"
-          />
-          <span class="text-[9px] px-1 py-0.2 rounded bg-white/5 font-mono text-neutral-400">
-            {{ model.categoryLabel }}
+          >
+            {{ getShortCategoryLabel(model.category) }}
+          </span>
+          <span v-if="model.id === modelValue" class="text-amber-300 text-[10px]">
+            ✦
           </span>
         </div>
 
-        <span class="font-serif font-medium tracking-wide text-neutral-200 text-[11px] truncate max-w-full group-hover:text-white pt-0.5">
-          {{ model.name }}
-        </span>
-        <span class="text-[9px] text-neutral-500 font-light truncate max-w-full">
-          {{ model.tagline }}
-        </span>
+        <!-- Bottom Row: Flower Name -->
+        <div class="pt-1">
+          <div
+            class="font-serif text-[11px] font-medium truncate group-hover:text-amber-200 transition-colors"
+            :class="model.id === modelValue ? 'text-amber-100 font-semibold' : 'text-neutral-300'"
+          >
+            {{ model.name }}
+          </div>
+        </div>
       </button>
     </div>
   </div>
@@ -70,7 +79,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { FLOWER_MODELS, getFlowerModelById } from '~/constants/models';
+import { FLOWER_MODELS, getFlowerModelById, type FlowerModelInfo } from '~/constants/models';
 
 const props = defineProps<{
   modelValue: string;
@@ -85,19 +94,32 @@ const selectedCategory = ref<string>('all');
 const currentModel = computed(() => getFlowerModelById(props.modelValue));
 
 const categories = [
-  { id: 'all', name: '全部' },
-  { id: 'bouquet', name: '💐 手捧' },
-  { id: 'rose', name: '🌹 玫瑰' },
-  { id: 'vase', name: '🏺 瓷瓶' },
-  { id: 'lotus', name: '🪷 睡莲' },
-  { id: 'sakura', name: '🌸 樱花' },
-  { id: 'peony', name: '🌺 名花' },
-  { id: 'fantasy', name: '✨ 奇幻' }
+  { id: 'all', label: '全部', icon: '🌸' },
+  { id: 'bouquet', label: '繁花玉锦', icon: '💐' },
+  { id: 'rose', label: '绛雪红芳', icon: '🌹' },
+  { id: 'vase', label: '素瓷幽香', icon: '🏺' },
+  { id: 'lotus', label: '碧水芙蓉', icon: '🪷' },
+  { id: 'sakura', label: '桃溪落樱', icon: '🌸' },
+  { id: 'peony', label: '国色天香', icon: '🌺' },
+  { id: 'fantasy', label: '蓬莱仙卉', icon: '✨' }
 ];
 
-function getCategoryCount(catId: string) {
+function getCategoryCount(catId: string): number {
   if (catId === 'all') return FLOWER_MODELS.length;
   return FLOWER_MODELS.filter((m) => m.category === catId).length;
+}
+
+function getShortCategoryLabel(catId: string): string {
+  switch (catId) {
+    case 'bouquet': return '锦束';
+    case 'rose': return '月季';
+    case 'vase': return '插花';
+    case 'lotus': return '青荷';
+    case 'sakura': return '樱木';
+    case 'peony': return '牡丹';
+    case 'fantasy': return '仙卉';
+    default: return '名花';
+  }
 }
 
 const filteredModels = computed(() => {
@@ -107,11 +129,18 @@ const filteredModels = computed(() => {
 </script>
 
 <style scoped>
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+.custom-scroll::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
 }
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(226, 156, 54, 0.3);
+  border-radius: 9999px;
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(226, 156, 54, 0.6);
 }
 </style>
