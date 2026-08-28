@@ -6,12 +6,7 @@
   body {
     @apply text-neutral-100 antialiased overflow-x-hidden selection:bg-gufeng-cinnabar/30 selection:text-amber-200;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-    background-color: #0b0c10;
-    background-image: url('/bg.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-color: #07080c;
   }
 }
 
