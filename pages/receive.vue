@@ -45,31 +45,48 @@
       </div>
     </header>
 
-    <!-- 4. Receiver Greeting Card Overlay (Appears after unwrap) -->
+    <!-- 4. Receiver Greeting Card Overlay (Collapsible) -->
     <main class="relative z-10 w-full max-w-lg mx-auto px-4 pb-4 sm:pb-8 flex-1 flex flex-col justify-end pointer-events-none min-h-0">
+      <!-- Collapsible Card Panel -->
       <Transition
-        enter-active-class="transition duration-1000 ease-out delay-200"
-        enter-from-class="opacity-0 translate-y-8 blur-sm scale-95"
-        enter-to-class="opacity-100 translate-y-0 blur-0 scale-100"
+        enter-active-class="transition duration-400 ease-out delay-100"
+        enter-from-class="opacity-0 translate-y-10 scale-95"
+        enter-to-class="opacity-100 translate-y-0 scale-100"
+        leave-active-class="transition duration-300 ease-in"
+        leave-from-class="opacity-100 translate-y-0 scale-100"
+        leave-to-class="opacity-0 translate-y-10 scale-95"
       >
         <div
-          v-if="isCardVisible"
+          v-if="isCardVisible && isPanelExpanded"
           class="gufeng-panel p-5 sm:p-7 rounded-3xl space-y-4 pointer-events-auto text-neutral-100 shadow-2xl border border-amber-500/30 max-h-[calc(100dvh-5.5rem)] flex flex-col"
         >
-          <!-- Card Header / Flower Badge & Recipient -->
+          <!-- Card Header / Flower Badge & Recipient & Collapse Button -->
           <div class="space-y-1 flex-shrink-0">
             <div class="flex items-center justify-between text-xs">
               <span class="font-serif tracking-widest text-amber-400/80">✦ 东方花笺 · 亲启 ✦</span>
-              <span
-                class="px-2.5 py-0.5 rounded-md text-[10px] font-serif border"
-                :style="{
-                  borderColor: modelInfo.accentColor + '60',
-                  color: modelInfo.accentColor,
-                  backgroundColor: modelInfo.accentColor + '18'
-                }"
-              >
-                {{ modelInfo.name }} · {{ modelInfo.categoryLabel }}
-              </span>
+              <div class="flex items-center gap-2">
+                <span
+                  class="px-2.5 py-0.5 rounded-md text-[10px] font-serif border"
+                  :style="{
+                    borderColor: modelInfo.accentColor + '60',
+                    color: modelInfo.accentColor,
+                    backgroundColor: modelInfo.accentColor + '18'
+                  }"
+                >
+                  {{ modelInfo.name }} · {{ modelInfo.categoryLabel }}
+                </span>
+                <!-- Hide Card Button -->
+                <button
+                  type="button"
+                  @click="isPanelExpanded = false"
+                  title="收起卡片，纯享全屏赏花"
+                  class="p-1 text-neutral-400 hover:text-amber-200 rounded-lg hover:bg-white/10 transition-colors"
+                >
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             <!-- Recipient name if present -->
@@ -120,6 +137,28 @@
           </div>
         </div>
       </Transition>
+
+      <!-- Floating Expand Button when Card is Collapsed -->
+      <Transition
+        enter-active-class="transition duration-300 ease-out delay-150"
+        enter-from-class="opacity-0 translate-y-6 scale-90"
+        enter-to-class="opacity-100 translate-y-0 scale-100"
+        leave-active-class="transition duration-200 ease-in"
+        leave-from-class="opacity-100 scale-100"
+        leave-to-class="opacity-0 scale-90"
+      >
+        <div v-if="isCardVisible && !isPanelExpanded" class="flex items-center justify-center pointer-events-auto pb-3">
+          <button
+            type="button"
+            @click="isPanelExpanded = true"
+            class="px-6 py-3 rounded-full gufeng-panel text-xs font-serif font-bold text-amber-200 border border-amber-500/50 shadow-2xl hover:bg-amber-500/25 transition-all flex items-center gap-2 group active:scale-95"
+          >
+            <span>💌</span>
+            <span class="tracking-wider">展开花笺寄语</span>
+            <span class="text-[10px] text-amber-400">▲</span>
+          </button>
+        </div>
+      </Transition>
     </main>
 
     <!-- Card Poster Modal -->
@@ -143,6 +182,7 @@ import { isMuted, playPopSound } from '~/utils/audioSynth';
 const route = useRoute();
 const flowerModelRef = ref<any>(null);
 const isCardVisible = ref(false);
+const isPanelExpanded = ref(true); // 👈 掌控接收端卡片折叠/展开
 const isCardPosterOpen = ref(false);
 const isGeneratingPoster = ref(false);
 const posterDataUrl = ref('');

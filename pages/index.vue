@@ -19,82 +19,128 @@
       @open-mood="isMoodOpen = true"
     />
 
-    <!-- Main Content: Classical Gu Feng Floating Panel with Fixed Action Footer -->
+    <!-- Main Content: Classical Gu Feng Floating Panel with Smooth Show/Hide Transition -->
     <main class="relative z-10 w-full max-w-xl mx-auto px-3 sm:px-4 pb-3 sm:pb-5 flex-1 flex flex-col justify-end pointer-events-none min-h-0">
-      <div class="gufeng-panel p-4 sm:p-5 rounded-3xl pointer-events-auto shadow-2xl transition-all flex flex-col max-h-[calc(100dvh-5.2rem)]">
-        <!-- 1. Flower Info Header (Fixed Top) -->
-        <div class="flex-shrink-0 flex items-center justify-between pb-2 border-b border-amber-500/20">
-          <div class="space-y-0.5">
-            <div class="flex items-center gap-2">
-              <span class="text-[10px] px-2 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-200 font-serif">
-                {{ activeModel.categoryLabel }}
-              </span>
-              <span class="text-[10px] font-serif tracking-widest text-amber-400/70">✦ 东方雅卉 ✦</span>
+      <!-- 1. Collapsible Control Panel -->
+      <Transition
+        enter-active-class="transition duration-400 ease-out"
+        enter-from-class="opacity-0 translate-y-12 scale-95"
+        enter-to-class="opacity-100 translate-y-0 scale-100"
+        leave-active-class="transition duration-300 ease-in"
+        leave-from-class="opacity-100 translate-y-0 scale-100"
+        leave-to-class="opacity-0 translate-y-12 scale-95"
+      >
+        <div
+          v-if="isPanelVisible"
+          class="gufeng-panel p-4 sm:p-5 rounded-3xl pointer-events-auto shadow-2xl transition-all flex flex-col max-h-[calc(100dvh-5.2rem)]"
+        >
+          <!-- 1. Flower Info Header (Fixed Top) -->
+          <div class="flex-shrink-0 flex items-center justify-between pb-2 border-b border-amber-500/20">
+            <div class="space-y-0.5">
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] px-2 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-200 font-serif">
+                  {{ activeModel.categoryLabel }}
+                </span>
+                <span class="text-[10px] font-serif tracking-widest text-amber-400/70">✦ 东方雅卉 ✦</span>
+              </div>
+              <h2 class="text-lg font-serif font-bold text-amber-100 flex items-center gap-2 pt-0.5">
+                <span>{{ activeModel.name }}</span>
+                <span class="text-xs text-amber-200/60 font-serif font-normal italic truncate max-w-[140px] sm:max-w-[200px]">
+                  “{{ activeModel.tagline }}”
+                </span>
+              </h2>
             </div>
-            <h2 class="text-lg font-serif font-bold text-amber-100 flex items-center gap-2 pt-0.5">
-              <span>{{ activeModel.name }}</span>
-              <span class="text-xs text-amber-200/60 font-serif font-normal italic truncate max-w-[150px] sm:max-w-[240px]">
-                “{{ activeModel.tagline }}”
-              </span>
-            </h2>
+
+            <!-- Quick Action Buttons in Header -->
+            <div class="flex items-center gap-1.5 flex-shrink-0">
+              <!-- Mood Matcher Trigger (寄情) -->
+              <button
+                type="button"
+                @click="isMoodOpen = true"
+                title="寄情题笺与花签"
+                class="px-2 py-1.5 rounded-xl text-xs text-amber-200 bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 transition-all flex items-center gap-1 shadow-sm active:scale-95"
+              >
+                <span>🏮</span>
+                <span class="font-serif font-medium text-[11px] hidden sm:inline">寄情</span>
+              </button>
+
+              <!-- Quick Random Button (摇签) -->
+              <button
+                type="button"
+                @click="pickRandomFlower"
+                title="随机采撷一束花"
+                class="px-2 py-1.5 rounded-xl text-xs text-amber-100 bg-red-900/30 hover:bg-red-900/50 border border-red-500/30 transition-all flex items-center gap-1 shadow-sm active:scale-95 group"
+              >
+                <span class="text-xs group-hover:rotate-45 transition-transform">🎲</span>
+                <span class="font-serif font-medium text-[11px] hidden sm:inline">摇签</span>
+              </button>
+
+              <!-- Hide Panel Button (收起面板 / 纯赏花) -->
+              <button
+                type="button"
+                @click="isPanelVisible = false"
+                title="收起面板，全屏沉浸纯享赏花"
+                class="px-2.5 py-1.5 rounded-xl text-xs font-serif text-amber-200 bg-black/40 hover:bg-amber-500/20 border border-amber-500/30 transition-all flex items-center gap-1 active:scale-95"
+              >
+                <span>👁️</span>
+                <span class="font-serif text-[11px]">收起</span>
+              </button>
+            </div>
           </div>
 
-          <!-- Quick Action Buttons in Header -->
-          <div class="flex items-center gap-1.5 flex-shrink-0">
-            <!-- Mood Matcher Trigger (寄情) -->
-            <button
-              type="button"
-              @click="isMoodOpen = true"
-              title="寄情题笺与花签"
-              class="px-2.5 py-1.5 rounded-xl text-xs text-amber-200 bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 transition-all flex items-center gap-1 shadow-sm active:scale-95"
-            >
-              <span>🏮</span>
-              <span class="font-serif font-medium text-[11px] hidden sm:inline">寄情题笺</span>
-            </button>
+          <!-- 2. Scrollable Body: Model Selector & Message Editor -->
+          <div class="flex-1 overflow-y-auto min-h-0 py-2.5 space-y-3 pr-1 custom-scroll">
+            <!-- 3D Model Selector -->
+            <ModelSelector
+              :model-value="selectedModelId"
+              @select="onSelectModel"
+            />
 
-            <!-- Quick Random Button (摇签) -->
+            <!-- Message & Signature Editor -->
+            <MessageEditor
+              ref="messageEditorRef"
+              :theme-tagline="activeModel.tagline"
+              :default-placeholder="activeModel.defaultMessage"
+              @update="onUpdateMessageData"
+            />
+          </div>
+
+          <!-- 3. Generate Link Action Button (Fixed Bottom & Always Visible) -->
+          <div class="flex-shrink-0 pt-2.5 border-t border-amber-500/20">
             <button
               type="button"
-              @click="pickRandomFlower"
-              title="随机采撷一束花"
-              class="px-2.5 py-1.5 rounded-xl text-xs text-amber-100 bg-red-900/30 hover:bg-red-900/50 border border-red-500/30 transition-all flex items-center gap-1 shadow-sm active:scale-95 group"
+              @click="onGenerateShareUrl"
+              class="w-full py-3 px-5 rounded-2xl gufeng-btn-gold text-xs font-serif font-bold tracking-widest uppercase transition-all flex items-center justify-center gap-2 shadow-xl active:scale-[0.99] group"
             >
-              <span class="text-sm group-hover:rotate-45 transition-transform">🎲</span>
-              <span class="font-serif font-medium text-[11px]">摇签换花</span>
+              <span>📜</span>
+              <span>卷轴封缄 · 生成 3D 花笺链接</span>
+              <span class="opacity-70">→</span>
             </button>
           </div>
         </div>
+      </Transition>
 
-        <!-- 2. Scrollable Body: Model Selector & Message Editor -->
-        <div class="flex-1 overflow-y-auto min-h-0 py-2.5 space-y-3 pr-1 custom-scroll">
-          <!-- 3D Model Selector -->
-          <ModelSelector
-            :model-value="selectedModelId"
-            @select="onSelectModel"
-          />
-
-          <!-- Message & Signature Editor -->
-          <MessageEditor
-            ref="messageEditorRef"
-            :theme-tagline="activeModel.tagline"
-            :default-placeholder="activeModel.defaultMessage"
-            @update="onUpdateMessageData"
-          />
-        </div>
-
-        <!-- 3. Generate Link Action Button (Fixed Bottom & Always Visible) -->
-        <div class="flex-shrink-0 pt-2.5 border-t border-amber-500/20">
+      <!-- 2. Floating Expand Trigger Button when Panel is Hidden (展开面板悬浮钮) -->
+      <Transition
+        enter-active-class="transition duration-300 ease-out delay-150"
+        enter-from-class="opacity-0 translate-y-6 scale-90"
+        enter-to-class="opacity-100 translate-y-0 scale-100"
+        leave-active-class="transition duration-200 ease-in"
+        leave-from-class="opacity-100 scale-100"
+        leave-to-class="opacity-0 scale-90"
+      >
+        <div v-if="!isPanelVisible" class="flex items-center justify-center pointer-events-auto pb-3">
           <button
             type="button"
-            @click="onGenerateShareUrl"
-            class="w-full py-3 px-5 rounded-2xl gufeng-btn-gold text-xs font-serif font-bold tracking-widest uppercase transition-all flex items-center justify-center gap-2 shadow-xl active:scale-[0.99] group"
+            @click="isPanelVisible = true"
+            class="px-6 py-3 rounded-full gufeng-panel text-xs font-serif font-bold text-amber-200 border border-amber-500/50 shadow-2xl hover:bg-amber-500/25 transition-all flex items-center gap-2.5 group active:scale-95"
           >
-            <span>📜</span>
-            <span>卷轴封缄 · 生成 3D 花笺链接</span>
-            <span class="opacity-70">→</span>
+            <span class="text-sm group-hover:rotate-12 transition-transform">🌸</span>
+            <span class="tracking-wider">展开选花题词面板</span>
+            <span class="text-[10px] text-amber-400">▲</span>
           </button>
         </div>
-      </div>
+      </Transition>
     </main>
 
     <!-- Modals & Feedback -->
@@ -140,6 +186,7 @@ import { generateCardPoster } from '~/utils/cardPosterGenerator';
 const flowerModelRef = ref<any>(null);
 const messageEditorRef = ref<any>(null);
 const selectedModelId = ref(DEFAULT_MODEL_ID);
+const isPanelVisible = ref(true); // 👈 掌控面板隐藏与显示状态
 const isShareOpen = ref(false);
 const isInfoOpen = ref(false);
 const isMoodOpen = ref(false);
