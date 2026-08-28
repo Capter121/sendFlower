@@ -305,7 +305,7 @@ function animate() {
   }
 
   controls.update();
-  composer.render();
+  renderer.render(scene, camera);
 }
 
 // ── Gyroscope / Device Orientation ──────────────────────────────────
@@ -459,9 +459,9 @@ function getCanvas(): HTMLCanvasElement | null {
 }
 
 function captureSnapshot(): string {
-  if (!renderer || !composer || !scene || !camera) return '';
+  if (!renderer || !scene || !camera) return '';
   try {
-    composer.render();
+    renderer.render(scene, camera);
     return renderer.domElement.toDataURL('image/png');
   } catch (err) {
     console.error('Failed to capture WebGL snapshot:', err);
