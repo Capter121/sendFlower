@@ -19,26 +19,20 @@
     </div>
 
     <!-- 3. Header Overlay -->
-    <header class="w-full flex items-center justify-between px-4 sm:px-6 py-4 z-20 flex-shrink-0">
+    <header class="w-full flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 z-20 flex-shrink-0">
       <NuxtLink to="/" class="flex items-center gap-2 text-xs font-serif tracking-widest text-amber-200/80 hover:text-amber-100 transition-colors group">
         <span class="text-xs group-hover:rotate-45 transition-transform text-amber-300">✦</span>
-        <span>花笺记 · 3D 东方繁花</span>
+        <span class="hidden sm:inline">花笺记 · 3D 东方繁花</span>
+        <span class="sm:hidden">花笺记</span>
       </NuxtLink>
 
-      <div class="flex items-center gap-2">
-        <!-- Sound Toggle -->
-        <button
-          type="button"
-          @click="toggleSound"
-          :title="isMuted ? '开启空灵风铃音效' : '静音'"
-          class="w-8 h-8 rounded-xl text-xs text-amber-200 gufeng-pill hover:bg-white/10 transition-all flex items-center justify-center border border-amber-500/30"
-        >
-          <span>{{ isMuted ? '🔕' : '🎐' }}</span>
-        </button>
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <!-- Background Music Player Widget -->
+        <BgmPlayer />
 
         <NuxtLink
           to="/"
-          class="px-3.5 py-1.5 rounded-xl text-xs font-serif font-medium text-amber-100 gufeng-pill hover:bg-amber-500/20 transition-all flex items-center gap-1.5 border border-amber-500/30 shadow-sm"
+          class="px-3 py-1 sm:py-1.5 rounded-xl text-xs font-serif font-medium text-amber-100 gufeng-pill hover:bg-amber-500/20 transition-all flex items-center gap-1 border border-amber-500/30 shadow-sm"
         >
           <span>🌸 我亦要赠花</span>
         </NuxtLink>
