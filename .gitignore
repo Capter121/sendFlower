@@ -30,7 +30,7 @@ Thumbs.db
 *.sln
 *.sw?
 
-# Raw Model Source (active served models are in public/models)
-model/
-reference/
-music/
+# Raw Model & Music Source in root only (active served files are in public/models and public/music)
+/model/
+/reference/
+/music/

@@ -8,6 +8,7 @@ export const isBgmInitialized = ref(false);
 
 let audioElement: HTMLAudioElement | null = null;
 let hasAttachedInteractionListener = false;
+let retryTimeout: any = null;
 
 /**
  * 随机获取一首音乐（可排除当前正在播放的曲目）
@@ -47,11 +48,8 @@ export function initBgmPlayer() {
   audioElement.addEventListener('pause', () => {
     isBgmPlaying.value = false;
   });
-  audioElement.addEventListener('error', (e) => {
-    console.warn('Audio playback error, trying next track...', e);
-    setTimeout(() => {
-      playNextBgmTrack();
-    }, 1000);
+  audioElement.addEventListener('error', () => {
+    isBgmPlaying.value = false;
   });
 
   isBgmInitialized.value = true;
@@ -74,6 +72,7 @@ function attemptAutoPlay() {
       })
       .catch(() => {
         // 浏览器阻止了未交互的自动播放，监听首次用户触摸/点击并启动
+        isBgmPlaying.value = false;
         if (!hasAttachedInteractionListener && typeof window !== 'undefined') {
           hasAttachedInteractionListener = true;
           const startOnUserGesture = () => {
@@ -108,7 +107,7 @@ export function toggleBgmPlay() {
     audioElement.play().then(() => {
       isBgmPlaying.value = true;
     }).catch((err) => {
-      console.warn('Failed to play audio:', err);
+      console.warn('Playback gesture required:', err);
     });
   } else {
     audioElement.pause();
@@ -125,14 +124,16 @@ export function playNextBgmTrack() {
     return;
   }
 
+  if (retryTimeout) clearTimeout(retryTimeout);
+
   const nextTrack = getRandomTrack(currentBgmTrack.value?.id);
   currentBgmTrack.value = nextTrack;
   audioElement.src = nextTrack.file;
   audioElement.currentTime = 0;
   audioElement.play().then(() => {
     isBgmPlaying.value = true;
-  }).catch((err) => {
-    console.warn('Failed to play next track:', err);
+  }).catch(() => {
+    isBgmPlaying.value = false;
   });
 }
 
