@@ -1,0 +1,35 @@
+# Nuxt build output
+.output
+.nuxt
+dist
+.nitro
+.cache
+
+# Dependencies
+node_modules
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Raw Model Source (active served models are in public/models)
+model/
+reference/
