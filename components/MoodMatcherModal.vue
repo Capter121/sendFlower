@@ -144,49 +144,49 @@ const moodList: MoodItem[] = [
     id: 'miss',
     emoji: '🌿',
     title: '脉脉相思 · 念君安好',
-    modelId: 'anemone_flower_low_poly',
-    recommendFlowerName: '微风银莲花',
+    modelId: 'stylized_lotus_flower',
+    recommendFlowerName: '碧水青莲',
     message: '山水迢迢，风动如思。见字如面，愿卿岁岁平安，万事顺意。'
   },
   {
     id: 'rest',
     emoji: '🍵',
     title: '清风抚慰 · 释劳解忧',
-    modelId: 'flowers_with_the_vase',
-    recommendFlowerName: '清雅瓷瓶插花',
+    modelId: 'magnolia_in_a_vase',
+    recommendFlowerName: '白玉兰瓶供',
     message: '世间碌碌，辛苦良多。愿奉素瓷一枝清香，洗净尘劳，偷得浮生半日闲。'
   },
   {
     id: 'celebrate',
     emoji: '🏮',
     title: '华堂喜庆 · 芳辰嘉礼',
-    modelId: 'flower_bouquet',
-    recommendFlowerName: '繁花似锦礼束',
+    modelId: 'tulips_and_carnations_in_a_vase',
+    recommendFlowerName: '青花郁金',
     message: '良辰吉日，繁花似锦。祝君前程明媚若霞光，所愿皆遂，岁岁常欢愉！'
   },
   {
     id: 'love',
     emoji: '❤️',
     title: '愿结同心 · 情深若许',
-    modelId: 'red_rose',
-    recommendFlowerName: '经典绯红玫瑰',
+    modelId: 'rose',
+    recommendFlowerName: '朱砂寒玫',
     message: '愿得一人心，白首不相离。满目山河皆胜景，唯有卿卿入我怀。'
   },
   {
     id: 'encourage',
     emoji: '🌟',
     title: '傲雪凌霜 · 坚韧向阳',
-    modelId: 'margarita_flower',
-    recommendFlowerName: '阳光雏菊',
-    message: '莫道浮云终蔽日，严霜尽处是阳春。愿君心怀凌云之志，大步向晴空！'
+    modelId: 'single_flower__rose_pink',
+    recommendFlowerName: '粉霞月季',
+    message: '千磨万击还坚劲，任尔东西南北风。且行且进，前路必有万道光芒。'
   },
   {
-    id: 'goodnight',
+    id: 'dream',
     emoji: '🌙',
-    title: '月照幽梦 · 清夜长眠',
-    modelId: 'low_poly_purple_flowers',
-    recommendFlowerName: '紫夜星芒花',
-    message: '夜色溶溶，月落星沉。卸去一身凡尘累，愿君今宵好梦无扰，清眠到天明。'
+    title: '幽梦入帘 · 祈福安眠',
+    modelId: 'blue_flower_animated',
+    recommendFlowerName: '灵犀幽梦',
+    message: '晚风拂柳，星汉灿烂。愿君今宵无挂碍，清梦压星河，夜夜得安寝。'
   }
 ];
 
